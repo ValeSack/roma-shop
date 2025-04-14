@@ -1,9 +1,10 @@
 import { useState, useCallback, useEffect } from "react";
+import "../css/Movies.css";
+import { fetchProducers, fetchStudios } from "../api/producersAndStudios";
 import api from "../api/api";
-import MovieForm from "../components/MovieForm";
 import { Pagination } from "../components/pagination";
-import MoviesSearchBar from "../components/MoviesSearchBar";
 import { CustomTable } from "../components/CustomTable";
+import { CustomFilter } from "../components/CustomFilter";
 import { IoMdCreate } from "react-icons/io";
 import { FiTrash2 } from "react-icons/fi";
 
@@ -41,16 +42,24 @@ const columns = [
 ];
 
 export const Movies = () => {
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState({
+    producerId: "",
+    studioId: "",
+  });
+  
+  const [appliedFilters, setAppliedFilters] = useState({});
   const [movies, setMovies] = useState([]);
   const [pageInfo, setPageInfo] = useState({ number: 0, totalPages: 1 });
-  const [editingMovie, setEditingMovie] = useState(null);
-console.log(movies);
+  const [producers, setProducers] = useState([]);
+  const [studios, setStudios] = useState([]);
+  // console.log(movies);
+  // console.log(producers, studios);
+
 
   const fetchMovies = useCallback(
     async (page = 0) => {
       try {
-        const params = { page, ...filters };
+        const params = { page, ...appliedFilters };
         const response = await api.get("/movies", { params });
         setMovies(response.data.content);
         setPageInfo(response.data.page);
@@ -58,38 +67,56 @@ console.log(movies);
         console.error("Error al obtener películas:", error);
       }
     },
-    [filters]
+    [appliedFilters]
   );
+  
 
   useEffect(() => {
     fetchMovies(0);
   }, [fetchMovies]);
 
-  const handleSearch = (field, value) => {
-    setFilters(value ? { [field]: value } : {});
-    fetchMovies(0);
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [producersData, studiosData] = await Promise.all([
+          fetchProducers(),
+          fetchStudios(),
+        ]);
+        setProducers(producersData);
+        setStudios(studiosData);
+      } catch (error) {
+        console.error("Error al cargar productores o estudios:", error);
+      }
+    };
+    loadData();
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({
+      ...prev,
+      [name]: name === "producerId" || name === "studioId" ? Number(value) || "" : value,
+    }));
   };
 
-  const handleCreate = async (movie) => {
-    const payload = {
-      name: movie.name,
-      producers: [{ id: movie.producerId }], 
-      studios: [{ id: movie.studioId }],
-    };
-    await api.post("/movies", payload);
-    fetchMovies(0);
+
+  const handleFilterSubmit = (e) => {
+    e.preventDefault();
+    const cleanedFilters = Object.entries(filters).reduce((acc, [key, val]) => {
+      if (val !== "") acc[key] = val;
+      return acc;
+    }, {});
+    setAppliedFilters(cleanedFilters);
   };
   
-  const handleEdit = async (movie) => {
-    const payload = {
-      name: movie.name,
-      producers: [{ id: movie.producerId }], 
-      studios: [{ id: movie.studioId }], 
-    };
-    await api.put(`/movies/${movie.id}`, payload);
-    fetchMovies(0);
-    setEditingMovie(null);
+  const handleClearFilters = () => {
+    setFilters({
+      producerId: "",
+      studioId: "",
+    });
+    setAppliedFilters({});
   };
+  
 
   const handleDelete = async (id) => {
     await api.delete(`/movies/${id}`);
@@ -108,14 +135,19 @@ console.log(movies);
   ];
 
   return (
-    <div>
-      <h1>Películas</h1>
-      <MoviesSearchBar onSearch={handleSearch} />
-      {editingMovie ? (
-        <MovieForm movie={editingMovie} onSubmit={handleEdit} />
-      ) : (
-        <MovieForm onSubmit={handleCreate} />
-      )}
+    <div className="movies-container">
+      <div className="header">
+        <h1>Películas</h1>
+          <CustomFilter
+            values={filters}
+            producers={producers}
+            studios={studios}
+            onChange={handleInputChange}
+            onSubmit={handleFilterSubmit}
+            onClear={handleClearFilters}
+            submitText="Filtrar"
+          />
+      </div>
       <CustomTable columns={columns} data={movies} actions={actions} />
       <Pagination
         currentPage={pageInfo.number}
