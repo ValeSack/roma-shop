@@ -1,0 +1,43 @@
+.table-container {
+    overflow-x: auto;
+    margin-top: 20px;
+  }
+  
+  .movies-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+  }
+  
+  .movies-table th,
+  .movies-table td {
+    border: 1px solid #f3f1f1;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .movies-table th {
+    background-color: #098d056b;
+  }
+
+  .actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  @media (max-width: 600px) {
+    .movies-table {
+      font-size: 14px;
+    }
+  
+    .movies-table th,
+    .movies-table td {
+      padding: 6px;
+    }
+  
+    .movies-table td:last-child button {
+      display: block;
+      margin: 4px 0;
+    }
+  }
+  
