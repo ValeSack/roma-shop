@@ -3,6 +3,8 @@ import Callback from "./pages/Callback";
 import { AuthProvider } from "./auth/AuthProvider";
 import { Movies } from "./pages/Movies";
 import PrivateRoute from "./auth/PrivateRouter";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
 
@@ -21,6 +23,7 @@ function App() {
             }
           />
         </Routes>
+        <ToastContainer position="top-right" autoClose={3000} />
       </AuthProvider>
     </BrowserRouter>
   )

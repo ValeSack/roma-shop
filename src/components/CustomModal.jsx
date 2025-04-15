@@ -9,7 +9,6 @@ export const CustomModal = ({ isOpen, onClose, children, title = "Formulario" })
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <header>
           <h2>{title}</h2>
-          <button className="modal-close-btn" onClick={onClose}>×</button>
         </header>
         {children}
       </div>
