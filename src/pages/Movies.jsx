@@ -42,15 +42,18 @@ export const Movies = () => {
     fetchMovies(0);
   }, []);
 
-  const fetchMovies = useCallback(async (page = 0) => {
-    try {
-      const data = await fetchMoviesFromApi(page, filters);
-      setMovies(data.content);
-      setPageInfo(data.page);
-    } catch (error) {
-      console.error("Error al obtener películas:", error);
-    }
-  }, [filters]);
+  const fetchMovies = useCallback(
+    async (page = 0, filtersOverride = filters) => {
+      try {
+        const data = await fetchMoviesFromApi(page, filtersOverride);
+        setMovies(data.content);
+        setPageInfo(data.page);
+      } catch (error) {
+        console.error("Error al obtener películas:", error);
+      }
+    },
+    [filters]
+  );
 
   const saveMovie = useCallback(async () => {
     try {
@@ -58,7 +61,7 @@ export const Movies = () => {
         toast.error("Todos los campos son obligatorios.");
         return;
       }
-  
+
       if (currentMovie.id) {
         await updateMovie(currentMovie);
         toast.success("Película actualizada correctamente.");
@@ -66,7 +69,7 @@ export const Movies = () => {
         await createMovie(currentMovie);
         toast.success("Película creada correctamente.");
       }
-  
+
       fetchMovies(0);
       closeModal();
     } catch (error) {
@@ -74,7 +77,7 @@ export const Movies = () => {
       console.error("Error al guardar película:", error);
     }
   }, [currentMovie, fetchMovies]);
-  
+
   const handleDeleteRequest = (movie) => {
     setMovieToDelete(movie);
     setIsConfirmModalOpen(true);
@@ -165,7 +168,10 @@ export const Movies = () => {
             e.preventDefault();
             fetchMovies(0);
           }}
-          onClear={() => setFilters({ producerId: "", studioId: "" })}
+          onClear={() => {
+            setFilters({ producerId: "", studioId: "" });
+            fetchMovies(0, { producerId: "", studioId: "" }); // Recargar la lista completa
+          }}
           submitText="Filtrar"
         />
       </div>
