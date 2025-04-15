@@ -94,19 +94,6 @@ export const Movies = () => {
     }
   };
 
-  const handleDelete = useCallback(async (id) => {
-    try {
-      if (window.confirm("¿Estás seguro de que deseas eliminar esta película?")) {
-        await deleteMovie(id);
-        toast.success("Película eliminada correctamente.");
-        fetchMovies(0);
-      }
-    } catch (error) {
-      toast.error("Ocurrió un error al eliminar la película.");
-      console.error("Error al eliminar película:", error);
-    }
-  }, [fetchMovies]);
-
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setCurrentMovie((prev) => ({
