@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
@@ -7,9 +7,10 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("access_token"));
   const navigate = useNavigate();
 
-  const login = (newToken) => {
-    localStorage.setItem("access_token", newToken);
-    setToken(newToken);
+  const login = (accessToken, refreshToken) => {
+    localStorage.setItem("access_token", accessToken);
+    localStorage.setItem("refresh_token", refreshToken);
+    setToken(accessToken);
   };
 
   const logout = () => {
@@ -28,5 +29,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Hook para usar en cualquier parte de la app
 export const useAuth = () => useContext(AuthContext);

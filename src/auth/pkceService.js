@@ -21,6 +21,10 @@ export function generateCodeVerifier(length = 64) {
   export async function createPKCE() {
     const codeVerifier = generateCodeVerifier();
     const codeChallenge = await generateCodeChallenge(codeVerifier);
+  
+    localStorage.setItem("pkce_code_verifier", codeVerifier);
+    localStorage.setItem("code_challenge", codeChallenge);
+  
     return { codeVerifier, codeChallenge };
   }
   

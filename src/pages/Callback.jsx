@@ -18,7 +18,7 @@ const Callback = () => {
       return;
     }
 
-    // Hacer POST para obtener el token
+    // POST para obtener el token
     const fetchToken = async () => {
       try {
         const data = new URLSearchParams({
@@ -31,7 +31,7 @@ const Callback = () => {
         const response = await axios.post("https://cloud.romapy.com/oauth2/token", data, {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
-            Authorization: "Basic ZnJvbnR3ZWI6MTIzNDU2", // frontweb:123456 en base64
+            Authorization: "Basic ZnJvbnR3ZWI6MTIzNDU2",
           },
         });
 
