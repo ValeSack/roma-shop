@@ -1,13 +1,84 @@
+.movies-container {
+    padding: 0 20px;
+    gap: 20px;
+}
+
 .header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     background-color: #009B4D;
     text-align: center;
     padding: 10px;
-    margin: 20px 0;
+    height: 100%;
+    margin: 10px 0 20px 0;
     border-radius: 10px;
-    /* gap: 20px; */
 }
 
-.movies-container {
-    padding: 20px;
-    gap: 20px;
+.header h1 {
+    color: white;
+    margin: 20px 0;
+}
+
+.header-title{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 20px;
+}
+
+
+.floating-button {
+    position: fixed;
+    bottom: 10%; 
+    right: 6%; 
+    width: 70px;
+    height: 70px;
+    background-color: #4CAF50;
+    color: white; 
+    border-radius: 50%; 
+    font-size: 25px;
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
+    cursor: pointer; 
+    z-index: 1000;
+    transition: background-color 0.3s ease; 
+}
+
+.floating-button:hover {
+    background-color: #45a049;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 120px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px 0;
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-size: 12px;
+    z-index: 1001;
+}
+
+.floating-button:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .floating-button {
+        font-size: 40px; 
+        width: 100px;
+        height: 100px;
+    }
 }

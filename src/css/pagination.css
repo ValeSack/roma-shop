@@ -1,0 +1,39 @@
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination-button {
+    cursor: pointer;
+    font-size: 30px;
+}
+
+.pagination-number {
+    cursor: pointer;
+    font-size: 15px;
+    margin: 0;
+    padding: 10px;
+    background-color: white;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-number:hover {
+    background-color: #f0f0f0;
+}
+
+.pagination-number.active {
+    font-weight: bold;
+    background-color: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+}
+
+@media (max-width: 768px) {
+    .pagination-number {
+        font-size: 25px;
+        padding: 3px;
+        width: auto;
+        height: 70px;
+    }
+}
