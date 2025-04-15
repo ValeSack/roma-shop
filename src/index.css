@@ -56,3 +56,13 @@ button:hover {
     background-color: #f9f9f9;
   }
 }
+
+@media (max-width: 768px) {
+  body {
+      font-size: 25px; /* Ajusta el tamaño según sea necesario */
+  }
+
+  button{
+    font-size: 25px;
+  }
+}

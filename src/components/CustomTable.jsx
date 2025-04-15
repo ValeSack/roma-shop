@@ -35,15 +35,17 @@ export const CustomTable = ({ columns, data, actions = [] }) => {
                                 ))}
                                 {actions.length > 0 && (
                                     <td>
-                                        {actions.map((action, i) => (
-                                            <button
-                                                key={i}
-                                                onClick={() => action.onClick(item)}
-                                                style={{ marginRight: "5px" }}
-                                            >
-                                                {action.label}
-                                            </button>
-                                        ))}
+                                        <div className="table-actions">
+                                            {actions.map((action, i) => (
+                                                <button
+                                                    className="table-button"
+                                                    key={i}
+                                                    onClick={() => action.onClick(item)}
+                                                >
+                                                    {action.label}
+                                                </button>
+                                            ))}
+                                        </div>
                                     </td>
                                 )}
                             </tr>

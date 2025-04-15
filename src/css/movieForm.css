@@ -1,6 +1,65 @@
-.movie-form {
+.form-movies {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.input {
+  width: 90%;
+  padding: 15px;
+  margin: 0 0 10px 0;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+}
+
+.select-group {
   display: flex;
   flex-direction: row;
-  gap: 10px;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-select {
+  width: 80%;
+  padding: 15px;
+  margin: 0;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+}
+
+.button {
+  background-color: #d0d3d09d;
+  color: rgb(0, 0, 0);
+  padding: 10px 25px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 15px 0 0 0;
+}
+
+.button:hover {
+  color: #108f04;
+}
+
+@media (max-width: 768px) {
+  .input {
+    font-size: 20px;
+  }
+
+  .form-select {
+    font-size: 20px;
+    padding: 15px;
+  }
+
+  .button {
+    font-size: 20px;
+  }
+
+  .form-select option {
+    font-size: 10px;
+    width: 50%;
+  }
 }
