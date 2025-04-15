@@ -15,6 +15,7 @@ import "../css/Movies.css";
 
 import { IoMdCreate } from "react-icons/io";
 import { FiTrash2 } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 export const Movies = () => {
   const [movies, setMovies] = useState([]);
@@ -24,6 +25,8 @@ export const Movies = () => {
   const [filters, setFilters] = useState({ producerId: "", studioId: "" });
   const [currentMovie, setCurrentMovie] = useState({ name: "", producerId: "", studioId: "" });
   const [showForm, setShowForm] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [movieToDelete, setMovieToDelete] = useState(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -51,23 +54,55 @@ export const Movies = () => {
 
   const saveMovie = useCallback(async () => {
     try {
+      if (!currentMovie.name || !currentMovie.producerId || !currentMovie.studioId) {
+        toast.error("Todos los campos son obligatorios.");
+        return;
+      }
+  
       if (currentMovie.id) {
         await updateMovie(currentMovie);
+        toast.success("Película actualizada correctamente.");
       } else {
         await createMovie(currentMovie);
+        toast.success("Película creada correctamente.");
       }
+  
       fetchMovies(0);
       closeModal();
     } catch (error) {
+      toast.error("Ocurrió un error al guardar la película.");
       console.error("Error al guardar película:", error);
     }
   }, [currentMovie, fetchMovies]);
+  
+  const handleDeleteRequest = (movie) => {
+    setMovieToDelete(movie);
+    setIsConfirmModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await deleteMovie(movieToDelete.id);
+      toast.success("Película eliminada correctamente.");
+      fetchMovies(0);
+    } catch (error) {
+      toast.error("Ocurrió un error al eliminar la película.");
+      console.error("Error al eliminar película:", error);
+    } finally {
+      setIsConfirmModalOpen(false);
+      setMovieToDelete(null);
+    }
+  };
 
   const handleDelete = useCallback(async (id) => {
     try {
-      await deleteMovie(id);
-      fetchMovies(0);
+      if (window.confirm("¿Estás seguro de que deseas eliminar esta película?")) {
+        await deleteMovie(id);
+        toast.success("Película eliminada correctamente.");
+        fetchMovies(0);
+      }
     } catch (error) {
+      toast.error("Ocurrió un error al eliminar la película.");
       console.error("Error al eliminar película:", error);
     }
   }, [fetchMovies]);
@@ -95,6 +130,11 @@ export const Movies = () => {
     setCurrentMovie({ name: "", producerId: "", studioId: "" });
   }, []);
 
+  const closeConfirmModal = () => {
+    setIsConfirmModalOpen(false);
+    setMovieToDelete(null);
+  };
+
   const handleClick = (page) => {
     fetchMovies(page);
   };
@@ -121,9 +161,9 @@ export const Movies = () => {
     },
     {
       label: <FiTrash2 />,
-      onClick: (movie) => handleDelete(movie.id),
+      onClick: (movie) => handleDeleteRequest(movie),
     },
-  ], [openModal, handleDelete]);
+  ], [openModal]);
 
   return (
     <div className="movies-container">
@@ -159,6 +199,21 @@ export const Movies = () => {
           title={currentMovie.id ? "Actualizar" : "Crear"}
         />
       </CustomModal>
+      <CustomModal
+        isOpen={isConfirmModalOpen}
+        onClose={closeConfirmModal}
+        title={`¿Estás seguro de que deseas eliminar la película "${movieToDelete?.name}"?`}
+      >
+        <div className="modal-actions">
+          <button className="button-cancel" onClick={closeConfirmModal}>
+            Cancelar
+          </button>
+          <button className="button-confirm" onClick={confirmDelete}>
+            Confirmar
+          </button>
+        </div>
+      </CustomModal>
+
       <CustomTable columns={columns} data={movies} actions={actions} />
       <Pagination
         currentPage={pageInfo.number}

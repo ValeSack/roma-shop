@@ -40,6 +40,26 @@
     cursor: pointer;
     color: #333;
   }
+
+  .modal-actions {
+    display: flex;
+    justify-content: end;
+  }
+  
+  .button-confirm {
+    color: #f44336;
+    border: none;
+  }
+  
+  .button-cancel {
+    color: #4CAF50;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .button-confirm:hover {
+    color: #d32f2f;
+  }
   
   @keyframes fadeIn {
     from {
