@@ -5,7 +5,7 @@ import { useAuth } from "../auth/AuthProvider";
 
 const Callback = () => {
   const navigate = useNavigate();
-  const { login, oauthState, pkce, canNegotiate } = useAuth();
+  const { login, pkce } = useAuth();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);

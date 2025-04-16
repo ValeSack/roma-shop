@@ -54,15 +54,11 @@ export const AuthProvider = ({ children }) => {
     navigate("/");
   };
 
-  const isAuthenticated = !!accessToken;
-  const canNegotiate = !!pkce && !!oauthState;
-
   return (
     <AuthContext.Provider 
       value={{ 
           accessToken, 
           isAuthenticated, 
-          canNegotiate,
           login, 
           logout, 
           refreshToken, 
