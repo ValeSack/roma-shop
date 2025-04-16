@@ -18,8 +18,8 @@ export async function refreshAccessToken() {
     },
   });
 
-  const { access_token, refresh_token: newRefreshToken } = response.data;
-  
+  const { access_token, refresh_token: newRefreshToken } = response.data; 
+
   localStorage.setItem("access_token", access_token);
   localStorage.setItem("refresh_token", newRefreshToken);
 

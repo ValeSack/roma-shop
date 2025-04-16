@@ -1,22 +1,16 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../auth/AuthProvider";
 
 const Callback = () => {
   const navigate = useNavigate();
+  const { login, oauthState, pkce, canNegotiate } = useAuth();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
     const returnedState = urlParams.get("state");
-    const storedState = localStorage.getItem("oauth_state");
-    const codeVerifier = localStorage.getItem("pkce_code_verifier");
-
-    // Validar state para prevenir CSRF
-    if (returnedState !== storedState) {
-      alert("Error de seguridad: state no coincide.");
-      return;
-    }
 
     // POST para obtener el token
     const fetchToken = async () => {
@@ -25,7 +19,7 @@ const Callback = () => {
           grant_type: "authorization_code",
           code,
           redirect_uri: "http://localhost:3000/callback",
-          code_verifier: codeVerifier,
+          code_verifier: pkce,
         });
 
         const response = await axios.post("https://cloud.romapy.com/oauth2/token", data, {
@@ -36,21 +30,18 @@ const Callback = () => {
         });
 
         const { access_token, refresh_token } = response.data;
-        localStorage.setItem("access_token", access_token);
-        localStorage.setItem("refresh_token", refresh_token);
-
-        // Redirigir a la app principal
+        login(access_token, refresh_token, pkce, returnedState);
         navigate("/movies");
       } catch (error) {
-        console.error("Error al obtener el token:", error);
-        alert("No se pudo obtener el token.");
+        console.error("Error fetching token:", error);
+        alert("Failed to authenticate.");
       }
     };
 
-    if (code && codeVerifier) {
+    if (code && pkce) {
       fetchToken();
     }
-  }, [navigate]);
+  }, [login, navigate]);
 
   return <p>Procesando autenticación...</p>;
 };
