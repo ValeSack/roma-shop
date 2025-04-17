@@ -54,6 +54,8 @@ export const AuthProvider = ({ children }) => {
     navigate("/");
   };
 
+  const isAuthenticated = !!accessToken;
+
   return (
     <AuthContext.Provider 
       value={{ 

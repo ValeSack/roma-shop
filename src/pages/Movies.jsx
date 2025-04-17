@@ -11,7 +11,7 @@ import { CustomTable } from "../components/CustomTable";
 import { CustomFilter } from "../components/CustomFilter";
 import { MovieForm } from "../components/MovieForm";
 import { CustomModal } from "../components/CustomModal";
-import "../css/Movies.css";
+import "../css/movies.css";
 
 import { IoMdCreate } from "react-icons/io";
 import { FiTrash2 } from "react-icons/fi";
